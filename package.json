@@ -2,20 +2,20 @@
   "name": "c72-rfid-scanner",
   "title": "React Native C72 Rfid Scanner",
   "version": "1.0.0",
-  "description": "TODO",
+  "description": "Chainway C72 RFID UHF Barcode Scanner",
   "main": "index.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/github_account/react-native-c72-rfid-scanner.git",
-    "baseUrl": "https://github.com/github_account/react-native-c72-rfid-scanner"
+    "url": "git+https://github.com/paulobunga/c72-rfid-scanner.git",
+    "baseUrl": "https://github.com/paulobunga/c72-rfid-scanner"
   },
   "keywords": [
     "react-native"
   ],
-  "author": "Your Name <yourname@email.com>",
+  "author": "Paul Obunga <paulobunga.one@gmail.com>",
   "license": "MIT",
   "licenseFilename": "LICENSE",
   "peerDependencies": {
@@ -27,7 +27,7 @@
     "react-native": "^0.61.5"
   },
   "bugs": {
-    "url": "https://github.com/github_account/react-native-c72-rfid-scanner/issues"
+    "url": "https://github.com/paulobunga/c72-rfid-scanner/issues"
   },
-  "homepage": "https://github.com/github_account/react-native-c72-rfid-scanner#readme"
+  "homepage": "https://github.com/paulobunga/c72-rfid-scanner#readme"
 }
