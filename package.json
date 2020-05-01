@@ -1,7 +1,7 @@
 {
   "name": "c72-rfid-scanner",
   "title": "React Native C72 Rfid Scanner",
-  "version": "1.0.4",
+  "version": "1.0.5",
   "description": "Chainway C72 RFID UHF Barcode Scanner",
   "main": "index.js",
   "scripts": {
