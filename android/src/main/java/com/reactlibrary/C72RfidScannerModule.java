@@ -1,15 +1,26 @@
 package com.reactlibrary;
 
+import android.util.Log;
+
+import androidx.annotation.Nullable;
+
+import com.facebook.react.bridge.LifecycleEventListener;
 import com.facebook.react.bridge.ReactApplicationContext;
 import com.facebook.react.bridge.ReactContextBaseJavaModule;
 import com.facebook.react.bridge.ReactMethod;
 import com.facebook.react.bridge.Callback;
 import com.facebook.react.bridge.Promise;
 
+import com.facebook.react.bridge.WritableArray;
+import com.facebook.react.bridge.WritableNativeArray;
+import com.facebook.react.modules.core.DeviceEventManagerModule;
 import com.rscja.deviceapi.RFIDWithUHF;
 import com.rscja.deviceapi.RFIDWithUHF.BankEnum;
 
-public class C72RfidScannerModule extends ReactContextBaseJavaModule Implements LifecycleEventListener {
+import java.util.ArrayList;
+import java.util.List;
+
+public class C72RfidScannerModule extends ReactContextBaseJavaModule implements LifecycleEventListener {
 
     private static final String UHF_READER_POWER_ON_ERROR = "UHF_READER_POWER_ON_ERROR";
     private static final String UHF_READER_INIT_ERROR = "UHF_READER_INIT_ERROR";
@@ -76,18 +87,26 @@ public class C72RfidScannerModule extends ReactContextBaseJavaModule Implements 
         new UhfReaderPower(false).start();
     }
 
+    public static WritableArray convertArrayToWritableArray(String[] tag) {
+        WritableArray array = new WritableNativeArray();
+        for(String tagId: tag) {
+            array.pushString(tagId);
+        }
+        return array;
+    }
+
     @ReactMethod
     public void readSingleTag(final Promise promise) {
         try {
-        String[] tag = mReader.inventorySingleTagEPC_TID_USER();
-        if(tag!= null && tag.length > 1) {
-            promise.resolve(convertArrayToWritableArray(tag));
-        }
-        else {
-            promise.reject(UHF_READER_READ_ERROR, "READ FAILED!");
-        }
-        } catch (Exception e) {
-        promise.reject(UHF_READER_READ_ERROR, e);
+            String[] tag = mReader.inventorySingleTagEPC_TID_USER();
+            if(tag!= null && tag.length > 1) {
+                promise.resolve(convertArrayToWritableArray(tag));
+            }
+            else {
+                promise.reject(UHF_READER_READ_ERROR, "READ FAILED!");
+            }
+        } catch (Exception ex) {
+            promise.reject(UHF_READER_READ_ERROR, ex);
         }
     }
 
@@ -172,7 +191,7 @@ public class C72RfidScannerModule extends ReactContextBaseJavaModule Implements 
                     } catch (Exception ex) {
                         sendEvent("UHF_POWER", "failed: init error");
                     }
-                } catch (Exception) {
+                } catch (Exception ex) {
                     sendEvent("UHF_POWER", "failed: power on error");
                 }
             }
@@ -217,10 +236,10 @@ public class C72RfidScannerModule extends ReactContextBaseJavaModule Implements 
             while (uhfInventoryStatus) {
                 res = mReader.readTagFromBuffer();
                 if (res != null) {
-                if("".equals(findEpc))
-                    addIfNotExists(res);
-                else
-                    lostTagOnly(res);
+                    if("".equals(findEpc))
+                        addIfNotExists(res);
+                    else
+                        lostTagOnly(res);
                 }
             }
         }
@@ -230,18 +249,20 @@ public class C72RfidScannerModule extends ReactContextBaseJavaModule Implements 
             if(epc.equals(findEpc)) {
                 // Same Tag Found
                 tag[1] = mReader.convertUiiToEPC(tag[1]);
-                sendEvent("UHF_TAG", RNUhfReaderModule.convertArrayToWritableArray(tag));
+                sendEvent("UHF_TAG", C72RfidScannerModule.convertArrayToWritableArray(tag));
             }
         }
 
+        public void addIfNotExists(String[] tid) {
+            if (!scannedTags.contains(tid[0])) {
+                Log.d("UHF Reader", "Read an Barcode, Now Size will be: " + (scannedTags.size()+1));
+                scannedTags.add(tid[0]);
+                tid[1] = mReader.convertUiiToEPC(tid[1]);
+                sendEvent("UHF_TAG", C72RfidScannerModule.convertArrayToWritableArray(tid));
 
-    }
-
-    public void addIfNotExists(String[] tid) {
-        if (!scannedTags.contains(tid[0])) {
-            scannedTags.add(tid[0]);
-            tid[1] = mReader.convertUiiToEPC(tid[1]);
-
+            }
         }
     }
+
+
 }
