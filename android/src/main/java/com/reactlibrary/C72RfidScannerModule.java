@@ -79,11 +79,13 @@ public class C72RfidScannerModule extends ReactContextBaseJavaModule implements 
 
     @ReactMethod
     private void initializeReader() {
+        Log.d("UHF Reader", "Initializing Reader");
         new UhfReaderPower().start();
     }
 
     @ReactMethod
     public void deInitializeReader() {
+        Log.d("UHF Reader", "DeInitializing Reader");
         new UhfReaderPower(false).start();
     }
 
