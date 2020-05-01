@@ -1,7 +1,7 @@
 {
   "name": "c72-rfid-scanner",
   "title": "React Native C72 Rfid Scanner",
-  "version": "1.0.0",
+  "version": "1.0.3",
   "description": "Chainway C72 RFID UHF Barcode Scanner",
   "main": "index.js",
   "scripts": {
@@ -15,7 +15,11 @@
   "keywords": [
     "react-native"
   ],
-  "author": "Paul Obunga <paulobunga.one@gmail.com>",
+  "author": {
+    "username": "paulobunga",
+    "name": "Paul Obunga",
+    "email": "paulobunga.one@gmail.com"
+  },
   "license": "MIT",
   "licenseFilename": "LICENSE",
   "peerDependencies": {
