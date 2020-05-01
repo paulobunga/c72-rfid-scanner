@@ -4,6 +4,7 @@ import com.facebook.react.bridge.ReactApplicationContext;
 import com.facebook.react.bridge.ReactContextBaseJavaModule;
 import com.facebook.react.bridge.ReactMethod;
 import com.facebook.react.bridge.Callback;
+import com.facebook.react.bridge.Promise;
 
 import com.rscja.deviceapi.RFIDWithUHF;
 import com.rscja.deviceapi.RFIDWithUHF.BankEnum;
@@ -16,6 +17,7 @@ public class C72RfidScannerModule extends ReactContextBaseJavaModule Implements 
     private static final String UHF_READER_RELEASE_ERROR = "UHF_READER_RELEASE_ERROR";
     private static final String UHF_READER_WRITE_ERROR = "UHF_READER_WRITE_ERROR";
     private static final String UHF_READER_OTHER_ERROR = "UHF_READER_OTHER_ERROR";
+    
     private RFIDWithUHF mReader = null;
     private Boolean mReaderStatus = false;
     private List<String> scannedTags = new ArrayList<String>();
@@ -146,6 +148,93 @@ public class C72RfidScannerModule extends ReactContextBaseJavaModule Implements 
     @ReactMethod
     public void clearAllTags() {
         scannedTags.clear();
+    }
+
+    class UhfReaderPower extends Thread {
+        Boolean powerOn;
+        
+        public UhfReaderPower() {
+            this.powerOn = true;
+        }
+
+        public UhfReaderPower(Boolean powerOn) {
+            this.powerOn = powerOn;
+        }
+
+        public void powerOn() {
+            if(mReader == null || !mReaderStatus) {
+                try {
+                    mReader = RFIDWithUHF.getInstance();
+                    try {
+                        mReaderStatus = mReader.init();
+                        mReader.setEPCTIDMode(true);
+                        sendEvent("UHF_POWER", "success: power on");
+                    } catch (Exception ex) {
+                        sendEvent("UHF_POWER", "failed: init error");
+                    }
+                } catch (Exception) {
+                    sendEvent("UHF_POWER", "failed: power on error");
+                }
+            }
+        }
+
+        public void powerOff() {
+            if(mReader != null) {
+                try {
+                    mReader.free();
+                    mReader = null;
+                    sendEvent("UHF_POWER", "success: power off");
+
+                } catch (Exception ex) {
+                    sendEvent("UHF_POWER", "failed: " + ex.getMessage());
+                }
+            }
+        }
+
+        public void run() {
+            if(powerOn) {
+                powerOn();
+            } else {
+                powerOff();
+            }
+        }
+    }
+
+    class TagThread extends Thread {
+
+        String findEpc;
+        public TagThread() {
+            findEpc = "";
+        }
+        public TagThread(String findEpc) {
+            this.findEpc = findEpc;
+        }
+
+        public void run() {
+            String strTid;
+            String strResult;
+            String[] res = null;
+            while (uhfInventoryStatus) {
+                res = mReader.readTagFromBuffer();
+                if (res != null) {
+                if("".equals(findEpc))
+                    addIfNotExists(res);
+                else
+                    lostTagOnly(res);
+                }
+            }
+        }
+
+        public void lostTagOnly(String[] tag) {
+            String epc = mReader.convertUiiToEPC(tag[1]);
+            if(epc.equals(findEpc)) {
+                // Same Tag Found
+                tag[1] = mReader.convertUiiToEPC(tag[1]);
+                sendEvent("UHF_TAG", RNUhfReaderModule.convertArrayToWritableArray(tag));
+            }
+        }
+
+
     }
 
     public void addIfNotExists(String[] tid) {
