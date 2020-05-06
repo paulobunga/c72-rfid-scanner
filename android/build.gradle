@@ -75,7 +75,7 @@ dependencies {
     implementation 'com.facebook.react:react-native:+'  // From node_modules
     implementation files('libs/xUtils-2.5.5.jar')
     implementation files('libs/jxl.jar')
-    implementation files('libs/cw-deviceapi20180918.jar')
+    implementation files('libs/cw-deviceapi20191022.jar')
 }
 
 def configureReactNativePom(def pom) {
