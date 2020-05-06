@@ -123,12 +123,14 @@ public class C72RfidScannerModule extends ReactContextBaseJavaModule implements 
         callback.invoke(uhfInventoryStatus);
     }
 
-//    @ReactMethod
-//    public void findTag(final String findEpc, final Callback callback) {
-//        uhfInventoryStatus = mReader.startInventoryTag();
-//        new TagThread(findEpc).start();
-//        callback.invoke(uhfInventoryStatus);
-//    }
+    @ReactMethod
+    public void returnReadTags(final Promise promise) {
+        if(scannedTags.size() > 0) {
+            Promise.resolve(scannedTags);
+        } else {
+            Promise.reject("BULK_READ_ERROR", "ERROR READING BULK");
+        }
+    }
 
     @ReactMethod
     public void stopReadingTags(final Callback callback) {
