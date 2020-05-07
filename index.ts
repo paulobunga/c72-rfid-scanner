@@ -28,8 +28,6 @@ export const stopReadingTags = (callback: (args: any[]) => any) => C72RfidScanne
 
 export const readPower = () => C72RfidScanner.readPower();
 
-export const returnReadTags = () => C72RfidScanner.returnReadTags();
-
 export const changePower: changePower = (powerValue: any) => C72RfidScanner.changePower(powerValue);
 
 export const powerListener: AddListener = (listener) =>
@@ -45,7 +43,6 @@ export default {
     readSingleTag,
     startReadingTags,
     stopReadingTags,
-    returnReadTags,
     readPower,
     changePower,
     deInitializeReader
