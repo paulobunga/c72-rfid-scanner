@@ -17,10 +17,6 @@ import C72RfidScanner from "c72-rfid-scanner";
 ```JSX
 const App = () => {
 
-  /**
-   * QUICK NOT (MAKE SURE TO ONLY RUN METHODS WHEN THE POWER STATE IS ON
-   * OTHERWISE YOU WILL GET AN ERROR
-   */
 
   const [isReading, setIsReading] = React.useState();
 
