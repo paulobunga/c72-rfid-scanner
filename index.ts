@@ -18,33 +18,33 @@ type AddListener = (cb: (args: any[]) => void) => void;
 
 type clearTags = () => void;
 
-export const initializeReader: initializeReader = () =>
+const initializeReader: initializeReader = () =>
   C72RfidScanner.initializeReader();
 
-export const deInitializeReader: deInitializeReader = () =>
+const deInitializeReader: deInitializeReader = () =>
   C72RfidScanner.deInitializeReader();
 
-export const readSingleTag: readSingleTag = () =>
+const readSingleTag: readSingleTag = () =>
   C72RfidScanner.readSingleTag();
 
-export const startReadingTags = (callback: (args: any[]) => any) =>
+const startReadingTags = (callback: (args: any[]) => any) =>
   C72RfidScanner.startReadingTags(callback);
 
-export const stopReadingTags = (callback: (args: any[]) => any) =>
+const stopReadingTags = (callback: (args: any[]) => any) =>
   C72RfidScanner.stopReadingTags(callback);
 
-export const readPower = () => C72RfidScanner.readPower();
+const readPower = () => C72RfidScanner.readPower();
 
-export const changePower: changePower = (powerValue: any) =>
+const changePower: changePower = (powerValue: any) =>
   C72RfidScanner.changePower(powerValue);
 
-export const powerListener: AddListener = (listener) =>
+const powerListener: AddListener = (listener) =>
   eventEmitter.addListener("UHF_POWER", listener);
 
-export const tagListener: AddListener = (listener) =>
+const tagListener: AddListener = (listener) =>
   eventEmitter.addListener("UHF_TAG", listener);
 
-export const clearTags: clearTags = () => C72RfidScanner.clearAllTags();
+const clearTags: clearTags = () => C72RfidScanner.clearAllTags();
 
 export default {
   powerListener,
@@ -56,4 +56,5 @@ export default {
   readPower,
   changePower,
   deInitializeReader,
+  clearTags
 };
