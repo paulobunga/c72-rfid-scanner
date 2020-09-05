@@ -148,11 +148,16 @@ public class C72RfidScannerModule extends ReactContextBaseJavaModule implements 
 
     @ReactMethod
     public void changePower(int powerValue, final Promise promise) {
-        Boolean uhfPowerState = mReader.setPower(powerValue);
-        if(uhfPowerState)
-        promise.resolve(uhfPowerState);
-        else
-        promise.reject(UHF_READER_OTHER_ERROR, "Can't Change Power");
+        try {
+            Boolean uhfPowerState = mReader.setPower(powerValue);
+            if(uhfPowerState)
+                promise.resolve(uhfPowerState);
+            else
+                promise.reject(UHF_READER_OTHER_ERROR, "Can't Change Power");
+        } catch (Exception ex) {
+            Log.d("UHF_SCANNER", ex.getLocalizedMessage());
+            promise.reject(UHF_READER_OTHER_ERROR, ex.getLocalizedMessage());
+        }
     }
 
     @ReactMethod
