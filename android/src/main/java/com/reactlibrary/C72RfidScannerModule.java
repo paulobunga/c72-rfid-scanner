@@ -105,12 +105,19 @@ public class C72RfidScannerModule extends ReactContextBaseJavaModule implements 
     public void readSingleTag(final Promise promise) {
         try {
             UHFTAGInfo tag = mReader.inventorySingleTag();
+
+            while (tag.getEPC() == null) {
+                tag = mReader.inventorySingleTag();
+            }
+
             String[] tagData = {tag.getEPC(), tag.getRssi()};
-            if(tagData != null) {
+
+            if(tagData != null && tag.getEPC() != null) {
                 promise.resolve(convertArrayToWritableArray(tagData));
             } else {
                 promise.reject(UHF_READER_READ_ERROR, "READ FAILED");
             }
+
         } catch (Exception ex) {
             promise.reject(UHF_READER_READ_ERROR, ex);
         }
