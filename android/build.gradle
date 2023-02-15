@@ -20,7 +20,7 @@ def safeExtGet(prop, fallback) {
 }
 
 apply plugin: 'com.android.library'
-apply plugin: 'maven'
+
 
 buildscript {
     // The Android Gradle plugin is only required when opening the android folder stand-alone.
