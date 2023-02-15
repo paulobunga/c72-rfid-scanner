@@ -27,7 +27,7 @@
   "licenseFilename": "LICENSE",
   "peerDependencies": {
     "react": "18.2.0",
-    "react-native": "0.71.3",
+    "react-native": "0.71.3"
   },
   "nativePackage": true,
   "devDependencies": {
